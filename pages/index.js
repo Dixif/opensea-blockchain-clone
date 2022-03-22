@@ -5,7 +5,7 @@ import Hero from '../components/Hero'
 import styles from '../styles/Home.module.css'
 import { useWeb3 } from '@3rdweb/hooks'
 import React, { useState, useEffect } from 'react'
-import { client } from '../lib/SanityClient'
+import { client } from '../lib/sanityClient'
 import toast, { Toaster } from 'react-hot-toast';
 const style = {
   wrapper: ``,
