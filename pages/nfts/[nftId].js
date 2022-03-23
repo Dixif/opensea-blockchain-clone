@@ -22,6 +22,7 @@ const NFt = () => {
     const [selectedNft, setSelectedNft] = useState()
     const [listings, setListings] = useState([])
     const router = useRouter()
+    
 
     const nftModule = useMemo(() => {
         if (!provider) return
@@ -29,7 +30,7 @@ const NFt = () => {
         const sdk = new ThirdwebSDK(
             provider.getSigner()
         )
-        return sdk.getNFTModule('0x91f0AC9585733f33E3491f086eb4797A6E5d0BAd')
+        return sdk.getNFTModule(router.query.collectionId)
     }, [provider])
 
     // get all NFTs in the collection
@@ -74,7 +75,7 @@ const NFt = () => {
                   <NFTImage selectedNft={selectedNft} />
                 </div>
                 <div className={style.detailsContainer}>
-                  <GeneralDetails selectedNft={selectedNft} />
+                  <GeneralDetails  collectionId={router.query.collectionId} selectedNft={selectedNft} />
                   <Purchase
                     isListed={router.query.isListed}
                     selectedNft={selectedNft}
