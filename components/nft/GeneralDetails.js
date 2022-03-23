@@ -3,6 +3,8 @@ import { MdRefresh } from 'react-icons/md'
 import { RiShareBoxLine } from 'react-icons/ri'
 import { FiMoreVertical } from 'react-icons/fi'
 import { GiShare } from 'react-icons/gi'
+import { useEffect, useMemo, useState } from 'react'
+import { client } from '../../lib/sanityClient'
 
 const style = {
   wrapper: `flex`,
@@ -19,11 +21,40 @@ const style = {
   divider: `border-r-2`,
 }
 
-const GeneralDetails = ({ selectedNft }) => {
+
+const GeneralDetails = ({ collectionId,selectedNft }) => {
+  const [collection, setCollection] = useState({})
+
+  const fetchCollectionData = async (sanityClient = client) => {
+    const query = `*[_type == "marketItems" && contractAddress == "${collectionId}" ] {
+      "imageUrl": profileImage.asset->url,
+      "bannerImageUrl": bannerImage.asset->url,
+      volumeTraded,
+      createdBy,
+      contractAddress,
+      "creator": createdBy->userName,
+      title, floorPrice,
+      "allOwners": owners[]->,
+      description
+    }`
+
+    const collectionData = await sanityClient.fetch(query)
+
+    //console.log(collectionData, '🔥')
+
+    // the query returns 1 object inside of an array
+    await setCollection(collectionData[0])
+  }
+
+  useEffect(() => {
+    fetchCollectionData()
+  }, [collectionId])
+
+
   return (
     <div className={style.wrapper}>
       <div className={style.infoContainer}>
-        <div className={style.accent}>Bored Ape Yacht Club</div>
+        <div className={style.accent}>{collection?.title}</div>
         <div className={style.nftTitle}>{selectedNft?.name}</div>
         <div className={style.otherInfo}>
           <div className={style.ownedBy}>

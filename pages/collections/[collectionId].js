@@ -11,7 +11,7 @@ import { HiDotsVertical } from 'react-icons/hi'
 import NFTCard from '../../components/NFTCard'
 
 const style = {
-  bannerImageContainer: `h-[20vh] w-screen overflow-hidden flex justify-center items-center`,
+  bannerImageContainer: `h-[34vh] w-screen overflow-hidden flex justify-center items-center`,
   bannerImage: `w-full object-cover`,
   infoContainer: `w-screen px-4`,
   midRow: `w-full flex justify-center text-white`,
@@ -47,15 +47,17 @@ const Collection = () => {
     const sdk = new ThirdwebSDK(
       provider.getSigner()
     )
+    //console.log('🔥Getnftmodule')
     return sdk.getNFTModule(collectionId)
-  }, [provider])
+  }, [collectionId])
 
   // get all NFTs in the collection
   useEffect(() => {
     if (!nftModule) return
       ; (async () => {
         const nfts = await nftModule.getAll()
-
+        //console.log('🔥Getnft')
+        //console.log(nfts, '🔥')
         setNfts(nfts)
       })()
   }, [nftModule])
@@ -93,13 +95,14 @@ const Collection = () => {
 
     const collectionData = await sanityClient.fetch(query)
 
-    console.log(collectionData, '🔥')
+    //console.log(collectionData, '🔥')
 
     // the query returns 1 object inside of an array
     await setCollection(collectionData[0])
   }
 
   useEffect(() => {
+    //console.log('🔥GetData')
     fetchCollectionData()
   }, [collectionId])
 
@@ -206,6 +209,7 @@ const Collection = () => {
       {nfts.map((nftItem, id) => (
         <NFTCard
           key={id}
+          collectionId ={collectionId}
           nftItem={nftItem}
           title={collection?.title}
           listings={listings}
